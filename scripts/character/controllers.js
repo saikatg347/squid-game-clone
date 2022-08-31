@@ -1,10 +1,13 @@
-// import * as THREE from 'three'
-import {Vector3, Quaternion, AnimationMixer, LoadingManager} from 'three'
+import { Vector3, Quaternion, AnimationMixer, LoadingManager } from 'three'
 
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
+
+
 import InputHandler from './inputHandler'
-import {CharacterFSM} from './finiteStateMachine'
+import { CharacterFSM } from './finiteStateMachine'
+
+import {gameState} from '../gameState'
 
 class BasicCharacterControllerProxy {
 	constructor(animations) {
@@ -30,6 +33,7 @@ export default class BasicCharacterController {
 
 		this._animations = {}
 		this._input = new InputHandler()
+
 		this._stateMachine = new CharacterFSM(
 			new BasicCharacterControllerProxy(this._animations)
 		)
@@ -52,7 +56,16 @@ export default class BasicCharacterController {
 			this._mixer = new AnimationMixer(this._target)
 
 			this._manager = new LoadingManager()
+			
+			const progressBar = document.getElementById('progress-bar')
+			this._manager.onProgress = (url, loaded, total) => {
+				progressBar.value = (loaded / total) * 100
+			}
+			
+			const progressContainer = document.querySelector('.progress-bar-container')
+
 			this._manager.onLoad = () => {
+				progressContainer.style.display = 'none'
 				this._stateMachine.SetState('idle')
 			}
 
@@ -68,19 +81,33 @@ export default class BasicCharacterController {
 
 			const loader = new FBXLoader(this._manager)
 			loader.setPath('assets/Bot/')
-			loader.load('run.fbx', (a) => {
-				_OnLoad('walk', a)
-			})
-			loader.load('sprint.fbx', (a) => {
-				_OnLoad('run', a)
-			})
 			loader.load('idle.fbx', (a) => {
 				_OnLoad('idle', a)
 			})
 			loader.load('standingJump.fbx', (a) => {
+				_OnLoad('standingJump', a)
+			})
+			loader.load('walk.fbx', (a) => {
+				_OnLoad('walk', a)
+			})
+			loader.load('walkBack.fbx', (a) => {
+				_OnLoad('walkBack', a)
+			})
+			loader.load('run.fbx', (a) => {
+				_OnLoad('run', a)
+			})
+			loader.load('runBack.fbx', (a) => {
+				_OnLoad('runBack', a)
+			})
+			loader.load('runningJump.fbx', (a) => {
+				_OnLoad('runningJump', a)
+			})
+			loader.load('dance.fbx', (a) => {
 				_OnLoad('dance', a)
 			})
-
+			loader.load('death.fbx', (a) => {
+				_OnLoad('death', a)
+			})
 		})
 	}
 
@@ -121,11 +148,18 @@ export default class BasicCharacterController {
 		const _R = controlObject.quaternion.clone()
 
 		const acc = this._acceleration.clone()
-		acc.multiplyScalar(3.0)
-    if (this._input.keys.shift) {
-			acc.multiplyScalar(2.0)
+		acc.multiplyScalar(3.5)
+		if (this._input.keys.shift) {
+			acc.multiplyScalar(2.1)
 		}
-
+		let backAcc = 1.5
+		let sidewayAcc = 4.0
+		if (gameState.isDead) {
+			acc.multiplyScalar(0.0)
+			backAcc = 0
+			sidewayAcc = 0 
+			this._stateMachine.SetState('death')
+		}
 		if (this._stateMachine._currentState.Name == 'dance') {
 			acc.multiplyScalar(0.0)
 		}
@@ -134,13 +168,13 @@ export default class BasicCharacterController {
 			velocity.z += acc.z * timeInSeconds
 		}
 		if (this._input.keys.backward) {
-			velocity.z -= acc.z * timeInSeconds
+			velocity.z -= acc.z * timeInSeconds - backAcc
 		}
 		if (this._input.keys.left) {
 			_A.set(0, 1, 0)
 			_Q.setFromAxisAngle(
 				_A,
-				4.0 * Math.PI * timeInSeconds * this._acceleration.y
+				sidewayAcc * Math.PI * timeInSeconds * this._acceleration.y
 			)
 			_R.multiply(_Q)
 		}
@@ -148,7 +182,7 @@ export default class BasicCharacterController {
 			_A.set(0, 1, 0)
 			_Q.setFromAxisAngle(
 				_A,
-				4.0 * -Math.PI * timeInSeconds * this._acceleration.y
+				sidewayAcc * -Math.PI * timeInSeconds * this._acceleration.y
 			)
 			_R.multiply(_Q)
 		}

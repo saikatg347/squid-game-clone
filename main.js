@@ -6,3 +6,4 @@ let _App = null
 window.addEventListener('DOMContentLoaded', () => {
 	_App = new World()
 })
+

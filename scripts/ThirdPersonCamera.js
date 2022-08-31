@@ -1,4 +1,5 @@
-import {Vector3} from 'three'
+import { Vector3 } from 'three'
+import { gameState } from './gameState.js'
 
 export default class ThirdPersonCamera {
 	constructor(params) {
@@ -17,7 +18,10 @@ export default class ThirdPersonCamera {
 	}
 
 	calculateIdealLookat() {
-		const idealLookat = new Vector3(0, 10, 50)
+		let idealLookat = new Vector3(0, 10, 50)
+		if (gameState.isDead) {
+			idealLookat = new Vector3(0, 0, 0)
+		}
 		idealLookat.applyQuaternion(this.params.target.Rotation)
 		idealLookat.add(this.params.target.Position)
 		return idealLookat

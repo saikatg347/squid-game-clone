@@ -1,4 +1,13 @@
-import {LoopOnce} from 'three'
+import { LoopOnce } from 'three'
+
+function onDeath() {
+	const endGameDisplay = document.querySelector('.game-over-container')
+	endGameDisplay.style.display = 'flex'
+	const restartButton = document.getElementById('restart-button')
+	restartButton.onclick = () => {
+		window.location.reload()
+	}
+}
 
 class State {
 	constructor(parent) {
@@ -59,6 +68,54 @@ class DanceState extends State {
 	Update(_) {}
 }
 
+class DeathState extends State {
+	constructor(parent) {
+		super(parent)
+
+		this._FinishedCallback = () => {
+			this._Finished()
+		}
+	}
+
+	get Name() {
+		return 'death'
+	}
+
+	Enter(prevState) {
+		const curAction = this._parent._proxy._animations['death'].action
+		const mixer = curAction.getMixer()
+		mixer.addEventListener('finished', this._FinishedCallback)
+
+		if (prevState) {
+			const prevAction = this._parent._proxy._animations[prevState.Name].action
+
+			curAction.reset()
+			curAction.setLoop(LoopOnce, 1)
+			curAction.clampWhenFinished = true
+			curAction.crossFadeFrom(prevAction, 0.2, true)
+			curAction.play()
+		} else {
+			curAction.play()
+		}
+	}
+
+	_Finished() {
+		this._Cleanup()
+		onDeath()
+	}
+
+	_Cleanup() {
+		const action = this._parent._proxy._animations['death'].action
+		action.getMixer().removeEventListener('finished', this._CleanupCallback)
+	}
+
+	Exit() {
+		this._Cleanup()
+	}
+
+	Update(_) {}
+}
+
 class WalkState extends State {
 	constructor(parent) {
 		super(parent)
@@ -98,6 +155,53 @@ class WalkState extends State {
 		if (input.keys.forward || input.keys.backward) {
 			if (input.keys.shift) {
 				this._parent.SetState('run')
+			}
+			return
+		}
+
+		this._parent.SetState('idle')
+	}
+}
+
+class WalkBackState extends State {
+	constructor(parent) {
+		super(parent)
+	}
+
+	get Name() {
+		return 'walkBack'
+	}
+
+	Enter(prevState) {
+		const curAction = this._parent._proxy._animations['walkBack'].action
+		if (prevState) {
+			const prevAction = this._parent._proxy._animations[prevState.Name].action
+
+			curAction.enabled = true
+
+			if (prevState.Name == 'run' || prevState.Name == 'runBack') {
+				const ratio =
+					curAction.getClip().duration / prevAction.getClip().duration
+				curAction.time = prevAction.time * ratio
+			} else {
+				curAction.time = 0.0
+				curAction.setEffectiveTimeScale(1.0)
+				curAction.setEffectiveWeight(1.0)
+			}
+
+			curAction.crossFadeFrom(prevAction, 0.5, true)
+			curAction.play()
+		} else {
+			curAction.play()
+		}
+	}
+
+	Exit() {}
+
+	Update(timeElapsed, input) {
+		if (input.keys.forward || input.keys.backward) {
+			if (input.keys.shift) {
+				this._parent.SetState(input.keys.backward ? 'runBack' : 'run')
 			}
 			return
 		}
@@ -153,6 +257,53 @@ class RunState extends State {
 	}
 }
 
+class RunBackState extends State {
+	constructor(parent) {
+		super(parent)
+	}
+
+	get Name() {
+		return 'runBack'
+	}
+
+	Enter(prevState) {
+		const curAction = this._parent._proxy._animations['runBack'].action
+		if (prevState) {
+			const prevAction = this._parent._proxy._animations[prevState.Name].action
+
+			curAction.enabled = true
+
+			if (prevState.Name == 'walk' || prevState.Name == 'walkBack') {
+				const ratio =
+					curAction.getClip().duration / prevAction.getClip().duration
+				curAction.time = prevAction.time * ratio
+			} else {
+				curAction.time = 0.0
+				curAction.setEffectiveTimeScale(1.0)
+				curAction.setEffectiveWeight(1.0)
+			}
+
+			curAction.crossFadeFrom(prevAction, 0.5, true)
+			curAction.play()
+		} else {
+			curAction.play()
+		}
+	}
+
+	Exit() {}
+
+	Update(timeElapsed, input) {
+		if (input.keys.forward || input.keys.backward) {
+			if (!input.keys.shift) {
+				this._parent.SetState(input.keys.backward ? 'walkBack' : 'walk')
+			}
+			return
+		}
+
+		this._parent.SetState('idle')
+	}
+}
+
 class IdleState extends State {
 	constructor(parent) {
 		super(parent)
@@ -180,8 +331,10 @@ class IdleState extends State {
 	Exit() {}
 
 	Update(_, input) {
-		if (input.keys.forward || input.keys.backward) {
+		if (input.keys.forward) {
 			this._parent.SetState('walk')
+		} else if (input.keys.backward) {
+			this._parent.SetState('walkBack')
 		} else if (input.keys.space) {
 			this._parent.SetState('dance')
 		}
@@ -193,4 +346,7 @@ export {
 	IdleState,
 	WalkState,
 	RunState,
+	WalkBackState,
+	RunBackState,
+	DeathState,
 }

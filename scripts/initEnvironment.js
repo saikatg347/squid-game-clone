@@ -23,10 +23,10 @@ export function initLighting(scene) {
 	directionalLight.shadow.camera.far = 500.0
 	directionalLight.shadow.camera.near = 0.5
 	directionalLight.shadow.camera.far = 500.0
-	directionalLight.shadow.camera.left = 50
-	directionalLight.shadow.camera.right = -50
-	directionalLight.shadow.camera.top = 50
-	directionalLight.shadow.camera.bottom = -50
+	directionalLight.shadow.camera.left = 500
+	directionalLight.shadow.camera.right = -500
+	directionalLight.shadow.camera.top = 500
+	directionalLight.shadow.camera.bottom = -500
 	scene.add(directionalLight)
 
 	const ambientLight = new THREE.AmbientLight(0xffffff, 0.25)
@@ -66,7 +66,7 @@ export function initFloor(scene) {
 	wrapAndRepeatTexture(floorMaterial.displacementMap)
 	wrapAndRepeatTexture(floorMaterial.aoMap)
 	const floor = new THREE.Mesh(
-		new THREE.PlaneGeometry(100, 100, 10, 10),
+		new THREE.PlaneGeometry(500, 500, 10, 10),
 		floorMaterial
 	)
 

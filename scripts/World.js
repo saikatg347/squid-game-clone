@@ -1,6 +1,13 @@
-import {WebGLRenderer, PCFSoftShadowMap, Scene, sRGBEncoding} from 'three'
+import { WebGLRenderer, PCFSoftShadowMap, Scene, sRGBEncoding } from 'three'
 
-import { initLighting, initBackground, initFloor, initCamera } from './initEnvironment'
+import { gameState } from './gameState'
+
+import {
+	initLighting,
+	initBackground,
+	initFloor,
+	initCamera,
+} from './initEnvironment'
 
 import BasicCharacterController from './character/controllers'
 import ThirdPersonCamera from './ThirdPersonCamera'
@@ -29,6 +36,7 @@ export default class World {
 		)
 
 		this.camera = initCamera()
+		
 		this.scene = new Scene()
 
 		initLighting(this.scene)
@@ -65,7 +73,14 @@ export default class World {
 
 			this.tick()
 
+			const time = Math.floor(this.previousTick/1000)
+
+			// if(time > 5) {
+			// 	gameState.isDead = true
+			// }
+
 			this.renderer.render(this.scene, this.camera)
+
 			this.step(t - this.previousTick)
 			this.previousTick = t
 		})
@@ -77,7 +92,7 @@ export default class World {
 			this.mixers.map((m) => m.update(timeElapsedS))
 		}
 
-		if(this.controls) {
+		if (this.controls) {
 			this.controls.Update(timeElapsedS)
 		}
 
