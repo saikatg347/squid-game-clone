@@ -2,11 +2,14 @@ import { WebGLRenderer, PCFSoftShadowMap, Scene, sRGBEncoding } from 'three'
 
 import { gameState } from './gameState'
 
+import InputHandler from './character/inputHandler'
+
 import {
 	initLighting,
 	initBackground,
 	initFloor,
 	initCamera,
+	initWalls,
 } from './initEnvironment'
 
 import BasicCharacterController from './character/controllers'
@@ -36,7 +39,7 @@ export default class World {
 		)
 
 		this.camera = initCamera()
-		
+
 		this.scene = new Scene()
 
 		initLighting(this.scene)
@@ -44,6 +47,8 @@ export default class World {
 		initBackground(this.scene)
 
 		initFloor(this.scene)
+
+		initWalls(this.scene)
 
 		this.mixers = []
 		this.previousTick = null
@@ -59,6 +64,10 @@ export default class World {
 		}
 		this.controls = new BasicCharacterController(params)
 
+		this.inputs = this.controls._input.keys
+
+		this.counter = document.getElementById('counter')
+
 		this.thirdPersonCamera = new ThirdPersonCamera({
 			camera: this.camera,
 			target: this.controls,
@@ -73,11 +82,35 @@ export default class World {
 
 			this.tick()
 
-			const time = Math.floor(this.previousTick/1000)
+			const time = Math.floor(this.previousTick / 1000)
 
-			// if(time > 5) {
-			// 	gameState.isDead = true
-			// }
+			if(time <= 3) {
+				this.counter.innerHTML = time
+			}
+			if (time == 4) {
+				this.counter.style.display = 'none'
+				gameState.isRunning = true
+				gameState.greenLight = true
+				gameState.lastUpdated = time
+			}
+			if (gameState.isRunning) {
+				const timeElapsed = time - gameState.lastUpdated
+				if (gameState.greenLight) {
+					console.log('Green light');
+					if(timeElapsed >= 6) {
+						this.switchLight(time)
+					}
+				} else {
+					console.log('Red light');
+					if (this.checkMovement()) {
+						// gameState.isDead = true
+					}
+					
+					if(timeElapsed >= 6) {
+						this.switchLight(time)
+					}
+				}
+			}
 
 			this.renderer.render(this.scene, this.camera)
 
@@ -97,6 +130,18 @@ export default class World {
 		}
 
 		this.thirdPersonCamera.Update(timeElapsedS)
+	}
+
+	checkMovement() {
+		for (let key of Object.values(this.inputs)) {
+			if (key) return true
+		}
+		return false
+	}
+
+	switchLight(time) {
+		gameState.lastUpdated = time
+		gameState.greenLight = !gameState.greenLight
 	}
 
 	onWindowResize() {

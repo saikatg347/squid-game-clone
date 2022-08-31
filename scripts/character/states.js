@@ -1,8 +1,9 @@
 import { LoopOnce } from 'three'
 
-function onDeath() {
+function onGameOver(event) {
 	const endGameDisplay = document.querySelector('.game-over-container')
 	endGameDisplay.style.display = 'flex'
+	endGameDisplay.firstElementChild.innerHTML = event === 'win' ? 'You\'ve won!' : 'You died!'
 	const restartButton = document.getElementById('restart-button')
 	restartButton.onclick = () => {
 		window.location.reload()
@@ -101,11 +102,59 @@ class DeathState extends State {
 
 	_Finished() {
 		this._Cleanup()
-		onDeath()
+		onDeath('death')
 	}
 
 	_Cleanup() {
 		const action = this._parent._proxy._animations['death'].action
+		action.getMixer().removeEventListener('finished', this._CleanupCallback)
+	}
+
+	Exit() {
+		this._Cleanup()
+	}
+
+	Update(_) {}
+}
+
+class WinState extends State {
+	constructor(parent) {
+		super(parent)
+
+		this._FinishedCallback = () => {
+			this._Finished()
+		}
+	}
+
+	get Name() {
+		return 'win'
+	}
+
+	Enter(prevState) {
+		const curAction = this._parent._proxy._animations['win'].action
+		const mixer = curAction.getMixer()
+		mixer.addEventListener('finished', this._FinishedCallback)
+
+		if (prevState) {
+			const prevAction = this._parent._proxy._animations[prevState.Name].action
+
+			curAction.reset()
+			curAction.setLoop(LoopOnce, 1)
+			curAction.clampWhenFinished = true
+			curAction.crossFadeFrom(prevAction, 0.2, true)
+			curAction.play()
+		} else {
+			curAction.play()
+		}
+	}
+
+	_Finished() {
+		this._Cleanup()
+		onGameOver('win')
+	}
+
+	_Cleanup() {
+		const action = this._parent._proxy._animations['win'].action
 		action.getMixer().removeEventListener('finished', this._CleanupCallback)
 	}
 
@@ -349,4 +398,5 @@ export {
 	WalkBackState,
 	RunBackState,
 	DeathState,
+	WinState
 }

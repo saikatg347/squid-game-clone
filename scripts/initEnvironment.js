@@ -80,3 +80,39 @@ function wrapAndRepeatTexture(map) {
   map.wrapS = map.wrapT = THREE.RepeatWrapping
   map.repeat.x = map.repeat.y = 10
 }
+
+export function initWalls(scene) {
+	const material = new THREE.MeshBasicMaterial({color: 0x00ff00})
+	
+	const wall1 = new THREE.Mesh(
+		new THREE.BoxGeometry(500, 200, 4),
+		material);
+	wall1.position.set(0, 0, -250);
+	wall1.castShadow = true;
+	wall1.receiveShadow = true;
+	scene.add(wall1);
+
+	const wall2 = new THREE.Mesh(
+		new THREE.BoxGeometry(500, 200, 4),
+		material);
+	wall2.position.set(0, 0, 250);
+	wall2.castShadow = true;
+	wall2.receiveShadow = true;
+	scene.add(wall2);
+
+	const wall3 = new THREE.Mesh(
+		new THREE.BoxGeometry(4, 200, 500),
+		material);
+	wall3.position.set(250, 0, 0);
+	wall3.castShadow = true;
+	wall3.receiveShadow = true;
+	scene.add(wall3);
+
+	const wall4 = new THREE.Mesh(
+		new THREE.BoxGeometry(4, 200, 500),
+		material);
+	wall4.position.set(-250, 0, 0);
+	wall4.castShadow = true;
+	wall4.receiveShadow = true;
+	scene.add(wall4);
+}

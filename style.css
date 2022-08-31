@@ -1,4 +1,5 @@
 body {
+	font-family: sans-serif;
   width: 100%;
 	height: 100%;
 	margin: 0;
@@ -15,7 +16,7 @@ body {
 	transform: translate(-50%, -50%);
 	width: 100%;
 	height: 100%;
-	background: rgba(0, 0, 0, 0.8);
+	background: rgba(0, 0, 0, 1);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -54,4 +55,14 @@ label {
 #restart-button {
 	padding: 1rem;
 	border-radius: 1rem;
+}
+
+#counter {
+	position: absolute;
+	left: 50%;
+	top: 30%;
+	transform: translate(-50%, -50%);
+	font-size: 5rem;
+	z-index: 1;
+	color: white;
 }

@@ -33,7 +33,7 @@ export default class BasicCharacterController {
 
 		this._animations = {}
 		this._input = new InputHandler()
-
+		
 		this._stateMachine = new CharacterFSM(
 			new BasicCharacterControllerProxy(this._animations)
 		)
@@ -150,15 +150,20 @@ export default class BasicCharacterController {
 		const acc = this._acceleration.clone()
 		acc.multiplyScalar(3.5)
 		if (this._input.keys.shift) {
-			acc.multiplyScalar(2.1)
+			acc.multiplyScalar(1.7)
 		}
 		let backAcc = 1.5
 		let sidewayAcc = 4.0
-		if (gameState.isDead) {
+		if(!gameState.isRunning) {
 			acc.multiplyScalar(0.0)
 			backAcc = 0
 			sidewayAcc = 0 
-			this._stateMachine.SetState('death')
+		}
+		if (gameState.isDead || gameState.isWinner) {
+			acc.multiplyScalar(0.0)
+			backAcc = 0
+			sidewayAcc = 0 
+			this._stateMachine.SetState( gameState.isDead ? 'death' : 'win')
 		}
 		if (this._stateMachine._currentState.Name == 'dance') {
 			acc.multiplyScalar(0.0)

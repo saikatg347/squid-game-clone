@@ -11,7 +11,6 @@ export default class InputHandler {
 			right: false,
 			space: false,
 			shift: false,
-			ctrl: false,
 		}
 		document.addEventListener('keydown', (e) => this.onKeyDown(e), false)
 		document.addEventListener('keyup', (e) => this.onKeyUp(e), false)
@@ -37,9 +36,6 @@ export default class InputHandler {
 			case 16: // SHIFT
 				this.keys.shift = true
 				break
-			case 17: // CTRL
-				this.keys.ctrl = true
-				break
 		}
 	}
 
@@ -62,9 +58,6 @@ export default class InputHandler {
 				break
 			case 16: // SHIFT
 				this.keys.shift = false
-				break
-			case 17: // CTRL
-				this.keys.ctrl = false
 				break
 		}
 	}

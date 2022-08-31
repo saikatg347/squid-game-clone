@@ -1,4 +1,4 @@
-import { IdleState, DanceState, WalkState, RunState, WalkBackState, RunBackState, DeathState } from './states'
+import { IdleState, DanceState, WalkState, RunState, WalkBackState, RunBackState, DeathState, WinState } from './states'
 
 class FiniteStateMachine {
 	constructor() {
@@ -48,5 +48,6 @@ export class CharacterFSM extends FiniteStateMachine {
 		this._AddState('walkBack', WalkBackState)
 		this._AddState('runBack', RunBackState)
 		this._AddState('death', DeathState)
+		this._AddState('win', WinState)
 	}
 }
