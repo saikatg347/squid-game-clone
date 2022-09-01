@@ -58,11 +58,6 @@ export default class BasicCharacterController {
 			this._manager = new LoadingManager()
 			
 			const progressContainer = document.querySelector('.progress-bar-container')
-			const progressBar = document.getElementById('progress-bar')
-
-			this._manager.onProgress = (url, loaded, total) => {
-				progressBar.value = (loaded / total) * 100
-			}			
 
 			this._manager.onLoad = () => {
 				progressContainer.style.display = 'none'

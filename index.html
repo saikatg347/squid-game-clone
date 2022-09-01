@@ -4,21 +4,26 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Vite App</title>
+		<title>Squid Game</title>
 	</head>
 	<body>
 		<div class="start-menu">
-			<button id="start-btn">Start</button>
+			<img src="assets/images/text.png" alt="squid game text" />
+			<button id="start-btn"><img src="assets/images/play.png" alt="Play"></button>
 		</div>
 		<div class="progress-bar-container">
-			<label for="progress-bar">Loading...</label>
-			<progress id="progress-bar" vaule="0" max="100"></progress>
+			<span></span>
+			<span></span>
+			<span></span>
 		</div>
 		<div id="counter"></div>
-    <div class="game-over-container">
-      <h2>You Died!</h2>
-      <button id="restart-button" onclick="reloadGame()">Restart</button>
-    </div>
+		<div class="game-over-container">
+			<img src="assets/images/logo.png" />
+			<h2></h2>
+			<button id="restart-button" onclick="reloadGame()">
+				<img src="assets/images/reload.png" alt="Restart">
+			</button>
+		</div>
 		<button id="audio-player"></button>
 		<button id="sniper"></button>
 		<script type="module" src="/main.js"></script>
