@@ -28,11 +28,16 @@ body {
 	padding-top: 200px;
 }
 
+.progress-bar-container .container {
+	width: 150px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 .progress-bar-container span {
-	width: 15px;
-	height: 15px;
-	margin: 0 5px;
-	background-color: #fff;
+	width: 25px;
+	height: 25px;
 	border-radius: 50%;
 	display: inline-block;
 	animation-name: dots;
@@ -41,13 +46,16 @@ body {
 	animation-timing-function: ease-in-out;
 }
 
+
+.progress-bar-container span:nth-child(1) {
+	animation-delay: 0.4s;
+}
+
 .progress-bar-container span:nth-child(2) {
-	background-color: #e83c80;
 	animation-delay: 0.4s;
 }
 
 .progress-bar-container span:nth-child(3) {
-	background-color: #fff;
 	animation-delay: 0.8s;
 }
 
@@ -144,7 +152,17 @@ body {
 	background: #e83c80;
 	border-radius: 50%;
 	border: none;
-	transition: transform 0.5s;
+	/* transition: transform 0.5s; */
+	animation: btn 2s infinite ease-in-out;
+}
+
+@keyframes btn {
+	0%, 100% {
+		transform: scale(1);
+	}
+	50%{
+		transform: scale(1.2);
+	}
 }
 
 #start-btn img {

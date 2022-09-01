@@ -2,12 +2,12 @@ import { Vector3, Quaternion, AnimationMixer, LoadingManager } from 'three'
 
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
-
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 import InputHandler from './inputHandler'
 import { CharacterFSM } from './finiteStateMachine'
 
-import {gameState} from '../gameState'
+import { gameState } from '../gameState'
 
 class BasicCharacterControllerProxy {
 	constructor(animations) {
@@ -33,7 +33,7 @@ export default class BasicCharacterController {
 
 		this._animations = {}
 		this._input = new InputHandler()
-		
+
 		this._stateMachine = new CharacterFSM(
 			new BasicCharacterControllerProxy(this._animations)
 		)
@@ -42,31 +42,30 @@ export default class BasicCharacterController {
 	}
 
 	_LoadModels() {
-		const loader = new FBXLoader()
-		loader.setPath('assets/player/')
-		loader.load('player.fbx', (fbx) => {
-			fbx.scale.setScalar(0.1)
-			fbx.traverse((c) => {
-				c.castShadow = true
+		this._manager = new LoadingManager()
+		const progressContainer = document.querySelector('.progress-bar-container')
+
+		this._manager.onLoad = () => {
+			progressContainer.style.display = 'none'
+			gameState.startCountDown()
+			this._stateMachine.SetState('idle')
+		}
+
+		const loader = new GLTFLoader(this._manager)
+		loader.load('assets/player.glb', (glb) => {
+			const model = glb.scene
+			model.scale.setScalar(10)
+			model.traverse((object) => {
+				if (object.isMesh) object.castShadow = true
 			})
 
-			this._target = fbx
+			this._target = model
 			this._params.scene.add(this._target)
 
 			this._mixer = new AnimationMixer(this._target)
 
-			this._manager = new LoadingManager()
-			
-			const progressContainer = document.querySelector('.progress-bar-container')
-
-			this._manager.onLoad = () => {
-				progressContainer.style.display = 'none'
-				gameState.startCountDown()
-				this._stateMachine.SetState('idle')
-			}
-
 			const _OnLoad = (animName, anim) => {
-				const clip = anim.animations[0]
+				const clip = anim
 				const action = this._mixer.clipAction(clip)
 
 				this._animations[animName] = {
@@ -75,31 +74,9 @@ export default class BasicCharacterController {
 				}
 			}
 
-			const loader = new FBXLoader(this._manager)
-			loader.setPath('assets/player/')
-			loader.load('idle.fbx', (a) => {
-				_OnLoad('idle', a)
-			})
-			loader.load('walk.fbx', (a) => {
-				_OnLoad('walk', a)
-			})
-			loader.load('walkBack.fbx', (a) => {
-				_OnLoad('walkBack', a)
-			})
-			loader.load('run.fbx', (a) => {
-				_OnLoad('run', a)
-			})
-			loader.load('runBack.fbx', (a) => {
-				_OnLoad('runBack', a)
-			})
-			loader.load('jump.fbx', (a) => {
-				_OnLoad('dance', a)
-			})
-			loader.load('death.fbx', (a) => {
-				_OnLoad('death', a)
-			})
-			loader.load('dance.fbx', (a) => {
-				_OnLoad('win', a)
+			const animations = glb.animations
+			animations.forEach((a) => {
+				_OnLoad(a.name, a)
 			})
 		})
 	}
@@ -141,31 +118,33 @@ export default class BasicCharacterController {
 		const _R = controlObject.quaternion.clone()
 
 		const acc = this._acceleration.clone()
-		acc.multiplyScalar(3.5)
+		acc.multiplyScalar(3)
 		if (this._input.keys.shift) {
 			acc.multiplyScalar(1.7)
 		}
 		let backAcc = 1.5
 		let sidewayAcc = 4.0
-		if(!gameState.isRunning) {
+		if (!gameState.isRunning) {
 			acc.multiplyScalar(0.0)
 			backAcc = 0
-			sidewayAcc = 0 
+			sidewayAcc = 0
 		}
-		if(gameState.isWinner) {
+		if (gameState.isWinner) {
 			acc.multiplyScalar(0.0)
 			backAcc = 0
-			sidewayAcc = 0 
+			sidewayAcc = 0
 			this._stateMachine.SetState('win')
-		} else if(gameState.isDead) {
+		} else if (gameState.isDead) {
 			acc.multiplyScalar(0.0)
 			backAcc = 0
-			sidewayAcc = 0 
+			sidewayAcc = 0
 			const sniper = document.getElementById('sniper')
 			this._stateMachine.SetState('death')
 		}
-		if (this._stateMachine._currentState.Name == 'dance') {
+		if (this._stateMachine._currentState.Name == 'jump') {
 			acc.multiplyScalar(0.0)
+			backAcc = 0
+			sidewayAcc = 0
 		}
 
 		if (this._input.keys.forward) {

@@ -3,7 +3,8 @@ import { LoopOnce } from 'three'
 function onGameOver(event) {
 	const endGameDisplay = document.querySelector('.game-over-container')
 	endGameDisplay.style.display = 'flex'
-	endGameDisplay.firstElementChild.innerHTML = event === 'win' ? 'You\'ve won!' : 'You died!'
+	endGameDisplay.firstElementChild.innerHTML =
+		event === 'win' ? "You've won!" : 'You died!'
 	const restartButton = document.getElementById('restart-button')
 	restartButton.onclick = () => {
 		window.location.reload()
@@ -20,7 +21,7 @@ class State {
 	Update() {}
 }
 
-class DanceState extends State {
+class JumpState extends State {
 	constructor(parent) {
 		super(parent)
 
@@ -30,11 +31,11 @@ class DanceState extends State {
 	}
 
 	get Name() {
-		return 'dance'
+		return 'jump'
 	}
 
 	Enter(prevState) {
-		const curAction = this._parent._proxy._animations['dance'].action
+		const curAction = this._parent._proxy._animations['jump'].action
 		const mixer = curAction.getMixer()
 		mixer.addEventListener('finished', this._FinishedCallback)
 
@@ -57,7 +58,7 @@ class DanceState extends State {
 	}
 
 	_Cleanup() {
-		const action = this._parent._proxy._animations['dance'].action
+		const action = this._parent._proxy._animations['jump'].action
 
 		action.getMixer().removeEventListener('finished', this._CleanupCallback)
 	}
@@ -384,19 +385,20 @@ class IdleState extends State {
 			this._parent.SetState('walk')
 		} else if (input.keys.backward) {
 			this._parent.SetState('walkBack')
-		} else if (input.keys.space) {
-			this._parent.SetState('dance')
-		}
+		} 
+		// else if (input.keys.space) {
+		// 	this._parent.SetState('jump')
+		// }
 	}
 }
 
 export {
-	DanceState,
+	JumpState,
 	IdleState,
 	WalkState,
 	RunState,
 	WalkBackState,
 	RunBackState,
 	DeathState,
-	WinState
+	WinState,
 }

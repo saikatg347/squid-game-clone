@@ -88,6 +88,10 @@ export default class World {
 			if (gameState.isRunning) {
 				const timeElapsed = time - gameState.lastUpdated
 
+				// if(time > 120) {
+				//  kill()
+				// }
+
 				if (this.controls._position.z > 200) {
 					gameState.isWinner = true
 				}
@@ -100,18 +104,11 @@ export default class World {
 				} else {
 					console.log(timeElapsed, 'red light')
 					if (this.checkMovement()) {
-						if (!gameState.isDead && !gameState.isWinner) {
-							const sniper = document.getElementById('sniper')
-							sniper.click()
-						}
-						gameState.isDead = true
+						// this.kill()
 					}
 
 					if (timeElapsed >= 6) {
-						if (!gameState.isDead && !gameState.isWinner) {
-							const audioPlayer = document.getElementById('audio-player')
-							audioPlayer.click()
-						}
+						this.sing()
 						this.switchLight(time)
 					}
 				}
@@ -135,6 +132,21 @@ export default class World {
 		}
 
 		this.thirdPersonCamera.Update(timeElapsedS)
+	}
+
+	kill() {
+		if (!gameState.isDead && !gameState.isWinner) {
+			const sniper = document.getElementById('sniper')
+			sniper.click()
+		}
+		gameState.isDead = true
+	}
+
+	sing() {
+		if (!gameState.isDead && !gameState.isWinner) {
+			const audioPlayer = document.getElementById('audio-player')
+			audioPlayer.click()
+		}
 	}
 
 	checkMovement() {

@@ -49,10 +49,10 @@ export function initBackground(scene) {
 
 export function initFloor(scene) {
 	const textureLoader = new THREE.TextureLoader()
-	const floorBaseColor = textureLoader.load('../assets/floor/COLOR.jpg')
-	const floorNormalMap = textureLoader.load('../assets/floor/NRM.jpg')
-	const floorHeightMap = textureLoader.load('../assets/floor/DISP.jpg')
-	const floorAmbientOcclusion = textureLoader.load('../assets/floor/OCC.jpg')
+	const floorBaseColor = textureLoader.load('../assets/floor/color.jpg')
+	const floorNormalMap = textureLoader.load('../assets/floor/normal-ogl.jpg')
+	const floorHeightMap = textureLoader.load('../assets/floor/height.jpg')
+	const floorAmbientOcclusion = textureLoader.load('../assets/floor/ao.jpg')
 
 	const floorMaterial = new THREE.MeshStandardMaterial({
 		map: floorBaseColor,

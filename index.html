@@ -9,19 +9,23 @@
 	<body>
 		<div class="start-menu">
 			<img src="assets/images/text.png" alt="squid game text" />
-			<button id="start-btn"><img src="assets/images/play.png" alt="Play"></button>
+			<button id="start-btn">
+				<img src="assets/images/play.png" alt="Play" />
+			</button>
 		</div>
 		<div class="progress-bar-container">
-			<span></span>
-			<span></span>
-			<span></span>
+			<div class="container">
+				<span><img src="assets/images/circle.png" /></span>
+				<span><img src="assets/images/triangle.png" /></span>
+				<span><img src="assets/images/square.png" /></span>
+			</div>
 		</div>
 		<div id="counter"></div>
 		<div class="game-over-container">
 			<img src="assets/images/logo.png" />
 			<h2></h2>
 			<button id="restart-button" onclick="reloadGame()">
-				<img src="assets/images/reload.png" alt="Restart">
+				<img src="assets/images/reload.png" alt="Restart" />
 			</button>
 		</div>
 		<button id="audio-player"></button>
