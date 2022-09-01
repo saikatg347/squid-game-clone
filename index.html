@@ -7,6 +7,9 @@
 		<title>Vite App</title>
 	</head>
 	<body>
+		<div class="start-menu">
+			<button id="start-btn">Start</button>
+		</div>
 		<div class="progress-bar-container">
 			<label for="progress-bar">Loading...</label>
 			<progress id="progress-bar" vaule="0" max="100"></progress>
@@ -16,6 +19,8 @@
       <h2>You Died!</h2>
       <button id="restart-button" onclick="reloadGame()">Restart</button>
     </div>
+		<button id="audio-player"></button>
+		<button id="sniper"></button>
 		<script type="module" src="/main.js"></script>
 	</body>
 </html>

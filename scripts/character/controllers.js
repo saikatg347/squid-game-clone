@@ -43,8 +43,8 @@ export default class BasicCharacterController {
 
 	_LoadModels() {
 		const loader = new FBXLoader()
-		loader.setPath('assets/Bot/')
-		loader.load('Bot.fbx', (fbx) => {
+		loader.setPath('assets/player/')
+		loader.load('player.fbx', (fbx) => {
 			fbx.scale.setScalar(0.1)
 			fbx.traverse((c) => {
 				c.castShadow = true
@@ -57,15 +57,16 @@ export default class BasicCharacterController {
 
 			this._manager = new LoadingManager()
 			
+			const progressContainer = document.querySelector('.progress-bar-container')
 			const progressBar = document.getElementById('progress-bar')
+
 			this._manager.onProgress = (url, loaded, total) => {
 				progressBar.value = (loaded / total) * 100
-			}
-			
-			const progressContainer = document.querySelector('.progress-bar-container')
+			}			
 
 			this._manager.onLoad = () => {
 				progressContainer.style.display = 'none'
+				gameState.startCountDown()
 				this._stateMachine.SetState('idle')
 			}
 
@@ -80,12 +81,9 @@ export default class BasicCharacterController {
 			}
 
 			const loader = new FBXLoader(this._manager)
-			loader.setPath('assets/Bot/')
+			loader.setPath('assets/player/')
 			loader.load('idle.fbx', (a) => {
 				_OnLoad('idle', a)
-			})
-			loader.load('standingJump.fbx', (a) => {
-				_OnLoad('standingJump', a)
 			})
 			loader.load('walk.fbx', (a) => {
 				_OnLoad('walk', a)
@@ -99,14 +97,14 @@ export default class BasicCharacterController {
 			loader.load('runBack.fbx', (a) => {
 				_OnLoad('runBack', a)
 			})
-			loader.load('runningJump.fbx', (a) => {
-				_OnLoad('runningJump', a)
-			})
-			loader.load('dance.fbx', (a) => {
+			loader.load('jump.fbx', (a) => {
 				_OnLoad('dance', a)
 			})
 			loader.load('death.fbx', (a) => {
 				_OnLoad('death', a)
+			})
+			loader.load('dance.fbx', (a) => {
+				_OnLoad('win', a)
 			})
 		})
 	}
@@ -159,11 +157,17 @@ export default class BasicCharacterController {
 			backAcc = 0
 			sidewayAcc = 0 
 		}
-		if (gameState.isDead || gameState.isWinner) {
+		if(gameState.isWinner) {
 			acc.multiplyScalar(0.0)
 			backAcc = 0
 			sidewayAcc = 0 
-			this._stateMachine.SetState( gameState.isDead ? 'death' : 'win')
+			this._stateMachine.SetState('win')
+		} else if(gameState.isDead) {
+			acc.multiplyScalar(0.0)
+			backAcc = 0
+			sidewayAcc = 0 
+			const sniper = document.getElementById('sniper')
+			this._stateMachine.SetState('death')
 		}
 		if (this._stateMachine._currentState.Name == 'dance') {
 			acc.multiplyScalar(0.0)

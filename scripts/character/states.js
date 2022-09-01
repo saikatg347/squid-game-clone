@@ -102,7 +102,7 @@ class DeathState extends State {
 
 	_Finished() {
 		this._Cleanup()
-		onDeath('death')
+		onGameOver('death')
 	}
 
 	_Cleanup() {

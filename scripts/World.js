@@ -83,30 +83,35 @@ export default class World {
 			this.tick()
 
 			const time = Math.floor(this.previousTick / 1000)
+			gameState.time = time
 
-			if(time <= 3) {
-				this.counter.innerHTML = time
-			}
-			if (time == 4) {
-				this.counter.style.display = 'none'
-				gameState.isRunning = true
-				gameState.greenLight = true
-				gameState.lastUpdated = time
-			}
 			if (gameState.isRunning) {
 				const timeElapsed = time - gameState.lastUpdated
+
+				if (this.controls._position.z > 200) {
+					gameState.isWinner = true
+				}
+
 				if (gameState.greenLight) {
-					console.log('Green light');
-					if(timeElapsed >= 6) {
+					console.log(timeElapsed, 'green light')
+					if (timeElapsed >= 6) {
 						this.switchLight(time)
 					}
 				} else {
-					console.log('Red light');
+					console.log(timeElapsed, 'red light')
 					if (this.checkMovement()) {
-						// gameState.isDead = true
+						if (!gameState.isDead && !gameState.isWinner) {
+							const sniper = document.getElementById('sniper')
+							sniper.click()
+						}
+						gameState.isDead = true
 					}
-					
-					if(timeElapsed >= 6) {
+
+					if (timeElapsed >= 6) {
+						if (!gameState.isDead && !gameState.isWinner) {
+							const audioPlayer = document.getElementById('audio-player')
+							audioPlayer.click()
+						}
 						this.switchLight(time)
 					}
 				}

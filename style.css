@@ -17,7 +17,7 @@ body {
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 1);
-	display: flex;
+	display: none;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
@@ -64,5 +64,19 @@ label {
 	transform: translate(-50%, -50%);
 	font-size: 5rem;
 	z-index: 1;
-	color: white;
+	color: red;
+}
+
+.start-menu {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#audio-player {
+	display: none;
+}
+#sniper {
+	display: none;
 }

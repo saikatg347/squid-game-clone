@@ -82,7 +82,7 @@ function wrapAndRepeatTexture(map) {
 }
 
 export function initWalls(scene) {
-	const material = new THREE.MeshBasicMaterial({color: 0x00ff00})
+	const material = new THREE.MeshBasicMaterial({color: 0xffffff})
 	
 	const wall1 = new THREE.Mesh(
 		new THREE.BoxGeometry(500, 200, 4),
@@ -116,3 +116,4 @@ export function initWalls(scene) {
 	wall4.receiveShadow = true;
 	scene.add(wall4);
 }
+

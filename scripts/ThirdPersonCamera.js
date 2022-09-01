@@ -18,9 +18,10 @@ export default class ThirdPersonCamera {
 	}
 
 	calculateIdealLookat() {
-		let idealLookat = new Vector3(0, 10, 50)
-		if (gameState.isDead) {
-			idealLookat = new Vector3(0, 0, 0)
+		let varX = window.outerWidth < 450 ? 20 : 5
+		let idealLookat = new Vector3(varX, 10, 50)
+		if (!gameState.isWinner && gameState.isDead) {
+			idealLookat = new Vector3(varX, 0, 0)
 		}
 		idealLookat.applyQuaternion(this.params.target.Rotation)
 		idealLookat.add(this.params.target.Position)
