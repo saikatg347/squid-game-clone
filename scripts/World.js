@@ -82,32 +82,35 @@ export default class World {
 
 			this.tick()
 
-			const time = Math.floor(this.previousTick / 1000)
+			// const time = Math.floor(this.previousTick / 1000)
+			const time = this.previousTick / 1000
 			gameState.time = time
 
 			if (gameState.isRunning) {
 				const timeElapsed = time - gameState.lastUpdated
 
-				// if(time > 120) {
-				//  kill()
-				// }
+				if(time > 120) {
+				 kill()
+				}
 
-				if (this.controls._position.z > 200) {
-					gameState.isWinner = true
+				if (this.controls._position.z >= 290) {
+					gameState.isWinner = true	
 				}
 
 				if (gameState.greenLight) {
-					console.log(timeElapsed, 'green light')
-					if (timeElapsed >= 6) {
+					if (timeElapsed >= 5.5) {
+						this.controls.dollHead.rotateY(Math.PI)
+						this.controls.dollHead.position.set(0, 0, 328)
 						this.switchLight(time)
 					}
 				} else {
-					console.log(timeElapsed, 'red light')
 					if (this.checkMovement()) {
-						// this.kill()
+						this.kill()
 					}
 
 					if (timeElapsed >= 6) {
+						this.controls.dollHead.rotateY(Math.PI)
+						this.controls.dollHead.position.set(0, 0, 340)
 						this.sing()
 						this.switchLight(time)
 					}

@@ -52,9 +52,38 @@ export default class BasicCharacterController {
 		}
 
 		const loader = new GLTFLoader(this._manager)
+		loader.load('assets/tree.glb', (glb) => {
+			const treeModel = glb.scene
+			treeModel.scale.setScalar(30)
+			treeModel.position.set(0, 0, 380)
+			treeModel.traverse(obj => {
+				if(obj.isMesh) obj.castShadow = true
+			})
+			this._params.scene.add(treeModel)
+		})
+		loader.load('assets/dollBody.glb', (glb) => {
+			const bodyModel = glb.scene
+			bodyModel.scale.setScalar(6)
+			bodyModel.position.set(0, 0, 340)
+			bodyModel.traverse(obj => {
+				if(obj.isMesh) obj.castShadow = true
+			})
+			this._params.scene.add(bodyModel)
+		})
+		loader.load('assets/dollHead.glb', (glb) => {
+			const headModel = glb.scene
+			headModel.scale.setScalar(6)
+			headModel.position.set(0, 0, 340)
+			headModel.traverse(obj => {
+				if(obj.isMesh) obj.castShadow = true
+			})
+			this.dollHead = headModel
+			this._params.scene.add(headModel)
+		})
 		loader.load('assets/player.glb', (glb) => {
 			const model = glb.scene
 			model.scale.setScalar(10)
+			model.position.set(0, -0.1, -370)
 			model.traverse((object) => {
 				if (object.isMesh) object.castShadow = true
 			})
@@ -120,7 +149,7 @@ export default class BasicCharacterController {
 		const acc = this._acceleration.clone()
 		acc.multiplyScalar(3)
 		if (this._input.keys.shift) {
-			acc.multiplyScalar(1.7)
+			acc.multiplyScalar(1.9)
 		}
 		let backAcc = 1.5
 		let sidewayAcc = 4.0
@@ -183,10 +212,21 @@ export default class BasicCharacterController {
 		sideways.applyQuaternion(controlObject.quaternion)
 		sideways.normalize()
 
-		sideways.multiplyScalar(velocity.x * timeInSeconds)
 		forward.multiplyScalar(velocity.z * timeInSeconds)
+		sideways.multiplyScalar(velocity.x * timeInSeconds)
 
-		controlObject.position.add(forward)
+		const newX = controlObject.position.x + forward.x
+		const newY = controlObject.position.y + forward.y
+		const newZ = controlObject.position.z + forward.z
+
+		const XLIMIT = 245
+		const ZLIMIT = 395
+
+		controlObject.position.x = newX > XLIMIT ? XLIMIT : newX < -XLIMIT ?  -XLIMIT : newX
+		controlObject.position.y = newY
+		controlObject.position.z = newZ > ZLIMIT ? ZLIMIT : newZ < -ZLIMIT ? -ZLIMIT : newZ
+
+		// controlObject.position.add(forward)
 		controlObject.position.add(sideways)
 
 		this._position.copy(controlObject.position)
