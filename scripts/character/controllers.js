@@ -147,11 +147,11 @@ export default class BasicCharacterController {
 		const _R = controlObject.quaternion.clone()
 
 		const acc = this._acceleration.clone()
-		acc.multiplyScalar(3)
+		acc.multiplyScalar(2)
 		if (this._input.keys.shift) {
-			acc.multiplyScalar(1.9)
+			acc.multiplyScalar(3)
 		}
-		let backAcc = 1.5
+		let backAcc = .5
 		let sidewayAcc = 4.0
 		if (!gameState.isRunning) {
 			acc.multiplyScalar(0.0)

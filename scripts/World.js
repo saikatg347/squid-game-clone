@@ -90,7 +90,7 @@ export default class World {
 				const timeElapsed = time - gameState.lastUpdated
 
 				if(time > 120) {
-				 kill()
+				 this.kill()
 				}
 
 				if (this.controls._position.z >= 290) {
