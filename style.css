@@ -25,7 +25,6 @@ body {
 	display: none;
 	justify-content: center;
 	align-items: center;
-	padding-top: 200px;
 }
 
 .progress-bar-container .container {
@@ -133,7 +132,7 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	background: url(assets/images/main-menu.jpg);
+	background: url(assets/images/main-menu3.jpg);
 	background-position: center;
 	background-size: cover;
 }

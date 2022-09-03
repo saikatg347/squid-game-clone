@@ -53,10 +53,9 @@ export function initBackground(scene) {
 export function initFloor(scene) {
 	const textureLoader = new THREE.TextureLoader()
 	const floorBaseColor = textureLoader.load('../assets/floor/color.jpg')
-	const floorNormalMap = textureLoader.load('../assets/floor/normal-ogl.png')
+	const floorNormalMap = textureLoader.load('../assets/floor/normal-dx.png')
 	const floorHeightMap = textureLoader.load('../assets/floor/height.png')
 	const floorAmbientOcclusion = textureLoader.load('../assets/floor/ao.jpg')
-	// const floorRoughnessMap = textureLoader.load('../assets/floor/roughness.jpg')
 
 	const floorMaterial = new THREE.MeshPhongMaterial({
 		map: floorBaseColor,
@@ -64,7 +63,6 @@ export function initFloor(scene) {
 		displacementMap: floorHeightMap,
 		displacementScale: 0.1,
 		aoMap: floorAmbientOcclusion,
-		// roughnessMap: floorRoughnessMap,
 	})
 	wrapAndRepeatTexture(floorMaterial.map)
 	wrapAndRepeatTexture(floorMaterial.normalMap)
