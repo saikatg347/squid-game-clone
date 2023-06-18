@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link type="image/png" sizes="96x96" rel="icon" href="/favicon.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Squid Game</title>
+		<link rel="stylesheet" href="style.css">
+		<!-- <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script> -->
+		<script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/FBXLoader.js"></script> -->
+	</head>
+	<body>
+		<div class="start-menu">
+			<img src="assets/images/text.png" alt="squid game text" />
+			<button id="start-btn">
+				<img src="assets/images/play.png" alt="Play" />
+			</button>
+		</div>
+		<div class="progress-bar-container">
+			<div class="container">
+				<span><img src="assets/images/circle.png" /></span>
+				<span><img src="assets/images/triangle.png" /></span>
+				<span><img src="assets/images/square.png" /></span>
+			</div>
+		</div>
+		<div id="counter"></div>
+		<div class="game-over-container">
+			<img src="assets/images/logo.png" />
+			<h2></h2>
+			<button id="restart-button" onclick="reloadGame()">
+				<img src="assets/images/reload.png" alt="Restart" />
+			</button>
+		</div>
+		<button id="audio-player"></button>
+		<button id="sniper"></button>
+		<script type="module" src="./main.js"></script>
+	</body>
+</html>
