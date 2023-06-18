@@ -37,12 +37,12 @@ export function initLighting(scene) {
 export function initBackground(scene) {
 	const loader = new THREE.CubeTextureLoader()
 	const texture = loader.load([
-		'../assets/background/box-right.bmp',
-		'../assets/background/box-left.bmp',
-		'../assets/background/box-top.bmp',
-		'../assets/background/box-bottom.bmp',
-		'../assets/background/box-front.bmp',
-		'../assets/background/box-back.bmp',
+		'assets/background/box-right.bmp',
+		'assets/background/box-left.bmp',
+		'assets/background/box-top.bmp',
+		'assets/background/box-bottom.bmp',
+		'assets/background/box-front.bmp',
+		'assets/background/box-back.bmp',
 	])
 	texture.encoding = THREE.sRGBEncoding
 	scene.background = texture
@@ -50,10 +50,10 @@ export function initBackground(scene) {
 
 export function initFloor(scene) {
 	const textureLoader = new THREE.TextureLoader()
-	const floorBaseColor = textureLoader.load('../assets/floor/color.jpg')
-	const floorNormalMap = textureLoader.load('../assets/floor/normal-dx.png')
-	const floorHeightMap = textureLoader.load('../assets/floor/height.png')
-	const floorAmbientOcclusion = textureLoader.load('../assets/floor/ao.jpg')
+	const floorBaseColor = textureLoader.load('assets/floor/color.jpg')
+	const floorNormalMap = textureLoader.load('assets/floor/normal-dx.png')
+	const floorHeightMap = textureLoader.load('assets/floor/height.png')
+	const floorAmbientOcclusion = textureLoader.load('assets/floor/ao.jpg')
 
 	const floorMaterial = new THREE.MeshPhongMaterial({
 		map: floorBaseColor,
@@ -95,7 +95,7 @@ export function initWalls(scene) {
 	const height = 800
 
 	const loader = new THREE.TextureLoader()
-	const texture = loader.load('../assets/images/wall-texture.jpg')
+	const texture = loader.load('assets/images/wall-texture.jpg')
 
 	const material = new THREE.MeshPhongMaterial({ map: texture })
 	const wall1 = new THREE.Mesh(new THREE.BoxGeometry(width + 10, 160, 4), material)

@@ -1,9 +1,3 @@
-// import { THREE.Vector3, Quaternion, AnimationMixer, LoadingManager } from 'three'
-
-// import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
-
-// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-
 import InputHandler from './inputHandler.js'
 import { CharacterFSM } from './finiteStateMachine.js'
 
@@ -56,8 +50,8 @@ export default class BasicCharacterController {
 			const treeModel = glb.scene
 			treeModel.scale.setScalar(30)
 			treeModel.position.set(0, 0, 380)
-			treeModel.traverse(obj => {
-				if(obj.isMesh) obj.castShadow = true
+			treeModel.traverse((obj) => {
+				if (obj.isMesh) obj.castShadow = true
 			})
 			this._params.scene.add(treeModel)
 		})
@@ -65,8 +59,8 @@ export default class BasicCharacterController {
 			const bodyModel = glb.scene
 			bodyModel.scale.setScalar(6)
 			bodyModel.position.set(0, 0, 340)
-			bodyModel.traverse(obj => {
-				if(obj.isMesh) obj.castShadow = true
+			bodyModel.traverse((obj) => {
+				if (obj.isMesh) obj.castShadow = true
 			})
 			this._params.scene.add(bodyModel)
 		})
@@ -74,8 +68,8 @@ export default class BasicCharacterController {
 			const headModel = glb.scene
 			headModel.scale.setScalar(6)
 			headModel.position.set(0, 0, 340)
-			headModel.traverse(obj => {
-				if(obj.isMesh) obj.castShadow = true
+			headModel.traverse((obj) => {
+				if (obj.isMesh) obj.castShadow = true
 			})
 			this.dollHead = headModel
 			this._params.scene.add(headModel)
@@ -151,7 +145,7 @@ export default class BasicCharacterController {
 		if (this._input.keys.shift) {
 			acc.multiplyScalar(3)
 		}
-		let backAcc = .5
+		let backAcc = 0.5
 		let sidewayAcc = 4.0
 		if (!gameState.isRunning) {
 			acc.multiplyScalar(0.0)
@@ -222,9 +216,11 @@ export default class BasicCharacterController {
 		const XLIMIT = 245
 		const ZLIMIT = 395
 
-		controlObject.position.x = newX > XLIMIT ? XLIMIT : newX < -XLIMIT ?  -XLIMIT : newX
+		controlObject.position.x =
+			newX > XLIMIT ? XLIMIT : newX < -XLIMIT ? -XLIMIT : newX
 		controlObject.position.y = newY
-		controlObject.position.z = newZ > ZLIMIT ? ZLIMIT : newZ < -ZLIMIT ? -ZLIMIT : newZ
+		controlObject.position.z =
+			newZ > ZLIMIT ? ZLIMIT : newZ < -ZLIMIT ? -ZLIMIT : newZ
 
 		// controlObject.position.add(forward)
 		controlObject.position.add(sideways)
