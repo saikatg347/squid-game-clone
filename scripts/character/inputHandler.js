@@ -30,6 +30,18 @@ export default class InputHandler {
 			case 68: // d
 				this.keys.right = true
 				break
+			case 37:
+				this.keys.left = true
+				break
+			case 38:
+				this.keys.forward = true
+				break
+			case 39:
+				this.keys.right = true
+				break
+			case 40:
+				this.keys.backward = true
+				break
 			case 32: // SPACE
 				this.keys.space = true
 				break
@@ -52,6 +64,18 @@ export default class InputHandler {
 				break
 			case 68: // d
 				this.keys.right = false
+				break
+			case 37:
+				this.keys.left = false
+				break
+			case 38:
+				this.keys.forward = false
+				break
+			case 39:
+				this.keys.right = false
+				break
+			case 40:
+				this.keys.backward = false
 				break
 			case 32: // SPACE
 				this.keys.space = false
